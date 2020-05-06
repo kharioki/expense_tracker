@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
+
+import { v1 as uuidv1 } from 'uuid';
 
 function AddTransaction() {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
 
+  const { addTransaction } = useContext(GlobalContext);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const newTransaction = { text, amount: +amount, id: uuidv1() };
+
+    addTransaction(newTransaction);
+    setText('');
+    setAmount(0);
+  };
+
   return (
     <React.Fragment>
       <h3>Add new transaction</h3>
-      <form id="form">
+      <form onSubmit={handleSubmit}>
         <div className="form-control">
           <label htmlFor="text">Text</label>
           <input
